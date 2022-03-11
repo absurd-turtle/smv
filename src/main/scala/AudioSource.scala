@@ -6,7 +6,7 @@ class AudioSource( useMic: Boolean ) {
   var stopped: Boolean = false
 
   def init() = {
-    var format: AudioFormat = new AudioFormat(44100, 8, 2, false, true)
+    var format: AudioFormat = new AudioFormat(44100, 8, 1, false, true)
     var info: DataLine.Info = new DataLine.Info(classOf[TargetDataLine], format)
 
     if (!AudioSystem.isLineSupported(info)) {
@@ -33,7 +33,11 @@ class AudioSource( useMic: Boolean ) {
     return line
   }
 
-  def read() = {
+  def getAmplitude(b1: Byte, b2: Byte): Double = {
+    (b2 << 8 | b1 & 0xFF) / 32767.0;
+  }
+
+  def read(): Array[Double] = {
 
     // Assume that the TargetDataLine, line, has already
     // been obtained and opened.
@@ -41,17 +45,25 @@ class AudioSource( useMic: Boolean ) {
     var numBytesRead: Int = 0
     var data: Array[Byte] = new Array(line.getBufferSize() / 5);
 
-    //TODO: Here, stopped is a global boolean set by another thread.
-    while (!stopped) {
-       // Read the next chunk of data from the TargetDataLine.
+     // Read the next chunk of data from the TargetDataLine.
+     // for (i <- 1 to 10) {
        numBytesRead =  line.read(data, 0, data.length);
-       // Save this chunk of data.
-       out.write(data, 0, numBytesRead);
-       for (b <- data) {
-         print(b.toString +", ")
+       var amplitudes: Array[Double] = new Array(data.size / 2)
+
+       for (i <- data.indices) {
+          if (i % 2 == 1){
+            amplitudes((i-1)/2) = getAmplitude(data(i-1), data(i))
+          }
        }
-       print("\n")
-    }     
+       // for (a <- amplitudes) {
+       //   println(a)
+       // }
+
+     // }
+     // Save this chunk of data.
+     // out.write(data, 0, numBytesRead);
+     // print("\n")
+     return amplitudes
   }
 }
 
