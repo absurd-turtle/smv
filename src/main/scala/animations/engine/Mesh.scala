@@ -9,17 +9,21 @@ import org.lwjgl.opengl.GL30._;
 import org.lwjgl.system.MemoryUtil;
 
 
-class Mesh(positions: Array[Float], indices: Array[Int]) {
+class Mesh(positions: Array[Float], colors: Array[Float], indices: Array[Int]) {
 
     var vaoId: Int = 0
 
     var posVboId: Int = 0
+
+    var colorVboId: Int = 0
 
     var idxVboId: Int = 0
 
     var vertexCount: Int = indices.length
     
     var verticesBuffer: FloatBuffer = null
+
+    var colorBuffer: FloatBuffer = null
 
     var indicesBuffer: IntBuffer = null
 
@@ -42,6 +46,14 @@ class Mesh(positions: Array[Float], indices: Array[Int]) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
+        // Colour VBO
+        colorVboId = glGenBuffers();
+        colorBuffer = MemoryUtil.memAllocFloat(colors.length);
+        colorBuffer.put(colors).flip();
+        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
+        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
+        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+
         glBindVertexArray(0);         
     } finally {
         if (verticesBuffer != null) {
@@ -49,6 +61,9 @@ class Mesh(positions: Array[Float], indices: Array[Int]) {
         }
         if (indicesBuffer != null) {
             MemoryUtil.memFree(indicesBuffer)
+        }
+        if (colorBuffer != null) {
+          MemoryUtil.memFree(colorBuffer)
         }
     }
 
@@ -67,6 +82,7 @@ class Mesh(positions: Array[Float], indices: Array[Int]) {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(posVboId);
         glDeleteBuffers(idxVboId);
+        glDeleteBuffers(colorVboId);
 
         // Delete the VAO
         glBindVertexArray(0);

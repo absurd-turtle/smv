@@ -32,7 +32,13 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
         var indices: Array[Int] = Array(
           0, 1, 3, 3, 1, 2,
         )
-        mesh = new Mesh(positions, indices)
+        var colors: Array[Float] = Array(
+          0.5f, 0.0f, 0.0f,
+          0.0f, 0.5f, 0.0f,
+          0.0f, 0.0f, 0.5f,
+          0.0f, 0.5f, 0.5f,
+        )
+        mesh = new Mesh(positions, colors, indices)
     }
 
     @Override
