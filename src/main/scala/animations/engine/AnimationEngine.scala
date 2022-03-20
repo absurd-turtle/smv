@@ -27,7 +27,7 @@ class AnimationEngine(var windowTitle: String, var width: Int, var height: Int, 
     protected def init() = {
         window.init();
         timer.init();
-        animationLogic.init();
+        animationLogic.init(window);
         println("animation engine initialized")
     }
 

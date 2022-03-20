@@ -2,7 +2,7 @@ package smv.animations.engine
 
 trait IAnimationLogic {
 
-    def init(): Unit
+    def init(window: Window): Unit
     
     def input(window: Window): Unit
 

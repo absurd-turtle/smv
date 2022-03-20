@@ -3,6 +3,10 @@ import scala.collection.immutable.Seq
 lazy val lwjglGroup    = "org.lwjgl"
 lazy val lwjglArtifact = "lwjgl"
 lazy val lwjglVersion  = "3.2.3"
+lazy val jomlGroup    = "org.joml"
+lazy val jomlArtifact = "joml"
+lazy val jomlVersion  = "1.10.4"
+
 
 lazy val os = Option(System.getProperty("os.name", ""))
   .map(_.substring(0, 3).toLowerCase) match {
@@ -29,7 +33,8 @@ lazy val root = (project in file("."))
       lwjglGroup % s"$lwjglArtifact-stb"    % lwjglVersion classifier s"natives-$os",
       lwjglGroup % s"$lwjglArtifact-glfw"   % lwjglVersion classifier s"natives-$os",
       lwjglGroup % s"$lwjglArtifact-assimp" % lwjglVersion classifier s"natives-$os",
-      lwjglGroup % s"$lwjglArtifact-opengl" % lwjglVersion classifier s"natives-$os"
+      lwjglGroup % s"$lwjglArtifact-opengl" % lwjglVersion classifier s"natives-$os",
+      jomlGroup  % jomlArtifact             % jomlVersion 
     ),
     scalacOptions ++= Seq(
       "-feature",

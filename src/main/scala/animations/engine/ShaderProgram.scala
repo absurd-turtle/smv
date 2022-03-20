@@ -1,14 +1,20 @@
 package smv.animations.engine
 
 import org.lwjgl.opengl.GL20._
+import scala.collection.mutable.HashMap
+import org.joml.Matrix4f
+import org.lwjgl.system.MemoryStack
+import java.nio.FloatBuffer
 
 class ShaderProgram {
 
-    var vertexShaderId: Int = 0
+    private var vertexShaderId: Int = 0
 
-    var fragmentShaderId: Int = 0
+    private var fragmentShaderId: Int = 0
 
-    var programId = glCreateProgram()
+    private var programId = glCreateProgram()
+
+    private var uniforms: HashMap[String, Integer] = new HashMap[String, Integer]()
 
     if (this.programId == 0) {
         throw new Exception("Could not create Shader")
@@ -38,6 +44,35 @@ class ShaderProgram {
         glAttachShader(programId, shaderId);
 
         return shaderId
+    }
+
+    def createUniform(uniformName: String) = {
+        var uniformLocation: Int = glGetUniformLocation(programId,
+            uniformName);
+        if (uniformLocation < 0) {
+            throw new Exception("Could not find uniform:" +
+                uniformName);
+        }
+        uniforms.put(uniformName, uniformLocation);
+    }
+
+    def setUniform(uniformName: String, value: Matrix4f) = {
+      var stack: MemoryStack = MemoryStack.stackPush()
+      try {
+        var fb: FloatBuffer = stack.mallocFloat(16)
+        value.get(fb)
+        var key = uniforms.get(uniformName).orNull
+        if(key == null) {
+          throw new Exception("Could not find uniform: " + 
+            uniformName + " in HashMap")
+        }
+        glUniformMatrix4fv(key, false, fb)
+      }
+      finally {
+        if(stack != null){
+          stack.close()
+        }
+      }
     }
 
     def link() = {

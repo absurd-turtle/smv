@@ -29,13 +29,23 @@ import org.lwjgl.opengl.GL30.glBindVertexArray;
 import org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import org.lwjgl.opengl.GL30.glGenVertexArrays;
 import org.lwjgl.system.MemoryUtil
+import org.joml.Matrix4f
+import scala.math
 
 class Renderer(){
   private var vboId: Int = 0
   private var vaoId: Int = 0
   private var shaderProgram: ShaderProgram = null
 
-  def init() = {
+  private final val FOV: Float = math.toRadians(60.0f).asInstanceOf[Float]
+  private final val Z_NEAR: Float = 0.01f;
+  private final val Z_FAR: Float = 1000;
+  private var projectionMatrix: Matrix4f = null
+
+  def init(window: Window) = {
+    var aspectRatio: Float = window.getWidth().toFloat / window.getHeight().toFloat
+    projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR)
+
     shaderProgram = new ShaderProgram()
 
     shaderProgram.createVertexShader(Source.fromFile(
@@ -46,7 +56,10 @@ class Renderer(){
       // new File(getClass.getClassLoader.getResource("/fragment.fs").getPath)
       "/home/sam/Documents/uni/exchange_semester/courses/ps2/project/smv/src/main/resources/fragment.fs"
     ).mkString);
+
     shaderProgram.link();
+
+    shaderProgram.createUniform("projectionMatrix")
   }
   
 
@@ -59,10 +72,13 @@ class Renderer(){
 
       if (window.isResized()) {
           glViewport(0, 0, window.getWidth(), window.getHeight());
+          var aspectRatio: Float = window.getWidth().toFloat / window.getHeight().toFloat
+          projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR)
           window.setResized(false);
       }
 
       shaderProgram.bind();
+      shaderProgram.setUniform("projectionMatrix", projectionMatrix)
 
       // Draw the mesh
       glBindVertexArray(mesh.getVaoId());

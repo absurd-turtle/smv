@@ -21,13 +21,13 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     var mesh: Mesh = null
     
     @Override
-    def init() = {
-        renderer.init();
+    def init(window: Window) = {
+        renderer.init(window);
         var positions: Array[Float] = Array(
-          -0.5f,  0.5f, 0.0f,
-          -0.5f, -0.5f, 0.0f,
-           0.5f, -0.5f, 0.0f,
-           0.5f,  0.5f, 0.0f,
+          -0.5f,  0.5f, -1.05f,
+          -0.5f, -0.5f, -1.05f,
+           0.5f, -0.5f, -1.05f,
+           0.5f,  0.5f, -1.05f,
         )
         var indices: Array[Int] = Array(
           0, 1, 3, 3, 1, 2,
