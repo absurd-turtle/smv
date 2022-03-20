@@ -1,6 +1,7 @@
 package smv.animations
 
 import smv.AudioSource
+import smv.animations.engine.Mesh
 
 import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -16,10 +17,22 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     var color = 0.0f;
     
     var renderer: Renderer = new Renderer()
+
+    var mesh: Mesh = null
     
     @Override
     def init() = {
         renderer.init();
+        var positions: Array[Float] = Array(
+          -0.5f,  0.5f, 0.0f,
+          -0.5f, -0.5f, 0.0f,
+           0.5f, -0.5f, 0.0f,
+           0.5f,  0.5f, 0.0f,
+        )
+        var indices: Array[Int] = Array(
+          0, 1, 3, 3, 1, 2,
+        )
+        mesh = new Mesh(positions, indices)
     }
 
     @Override
@@ -49,16 +62,16 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
 
         val amplitudes = audioSource.read()
 
-        def abs(x: Double): Double = {
-          if (x<0) x*(-1) else x
-        }
+        // def abs(x: Double): Double = {
+        //   if (x<0) x*(-1) else x
+        // }
 
-        def abs_mean(xs: Array[Double]) = {
-          val ys = xs.map(x => abs(x))
-          ys.sum / ys.length
-        }
+        // def abs_mean(xs: Array[Double]) = {
+        //   val ys = xs.map(x => abs(x))
+        //   ys.sum / ys.length
+        // }
 
-        color = abs_mean(amplitudes).asInstanceOf[Float]
+        // color = abs_mean(amplitudes).asInstanceOf[Float]
         // for (a <- amplitudes) {
         //   println(a)
         // }
@@ -67,7 +80,7 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     @Override
     def render(window: Window) = {
         window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window);
+        renderer.render(window, mesh);
     }
 
     @Override

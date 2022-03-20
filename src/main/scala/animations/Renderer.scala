@@ -2,6 +2,7 @@ package smv.animations
 
 import engine.Window;
 import engine.ShaderProgram;
+import engine.Mesh;
 import scala.io.Source
 import java.nio.FloatBuffer;
 import java.io.File
@@ -11,8 +12,9 @@ import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import org.lwjgl.opengl.GL11.GL_FLOAT;
 import org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import org.lwjgl.opengl.GL11.glClear;
-import org.lwjgl.opengl.GL11.glDrawArrays;
+import org.lwjgl.opengl.GL11.glDrawElements;
 import org.lwjgl.opengl.GL11.glViewport;
 import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
@@ -26,6 +28,7 @@ import org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import org.lwjgl.opengl.GL30.glBindVertexArray;
 import org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import org.lwjgl.opengl.GL30.glGenVertexArrays;
+import org.lwjgl.system.MemoryUtil
 
 class Renderer(){
   private var vboId: Int = 0
@@ -44,34 +47,6 @@ class Renderer(){
       "/home/sam/Documents/uni/exchange_semester/courses/ps2/project/smv/src/main/resources/fragment.fs"
     ).mkString);
     shaderProgram.link();
-
-    var triangleVertices: Array[Float] = Array(
-         0.0f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f
-    )
-
-    var verticesBuffer: FloatBuffer = memAllocFloat(triangleVertices.length);
-    verticesBuffer.put(triangleVertices).flip();
-
-    var vaoId = glGenVertexArrays();
-    glBindVertexArray(vaoId);
-
-    var vboId = glGenBuffers();
-    glBindBuffer(GL_ARRAY_BUFFER, vboId);
-    glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-
-    // Enable location 0
-    glEnableVertexAttribArray(0);
-    // Define structure of the data
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-
-    // Unbind the VBO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    // Unbind the VAO
-    glBindVertexArray(0);
-    memFree(verticesBuffer);
   }
   
 
@@ -79,7 +54,7 @@ class Renderer(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  def render(window: Window) = {
+  def render(window: Window, mesh: Mesh) = {
       clear();
 
       if (window.isResized()) {
@@ -89,13 +64,13 @@ class Renderer(){
 
       shaderProgram.bind();
 
-      // Bind to the VAO
-      glBindVertexArray(vaoId);
-
-      // Draw the vertices
-      glDrawArrays(GL_TRIANGLES, 0, 3);
+      // Draw the mesh
+      glBindVertexArray(mesh.getVaoId());
+      glEnableVertexAttribArray(0);
+      glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
 
       // Restore state
+      glDisableVertexAttribArray(0)
       glBindVertexArray(0);
 
       shaderProgram.unbind();
@@ -105,15 +80,5 @@ class Renderer(){
       if (shaderProgram != null) {
           shaderProgram.cleanup();
       }
-
-      glDisableVertexAttribArray(0);
-
-      // Delete the VBO
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glDeleteBuffers(vboId);
-
-      // Delete the VAO
-      glBindVertexArray(0);
-      glDeleteVertexArrays(vaoId);
   }
 }
