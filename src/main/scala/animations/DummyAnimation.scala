@@ -1,6 +1,7 @@
 package smv.animations
 
 import smv.AudioSource
+import smv.animations.engine.AnimationItem
 import smv.animations.engine.Mesh
 
 import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
@@ -19,6 +20,7 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     var renderer: Renderer = new Renderer()
 
     var mesh: Mesh = null
+    var quad: AnimationItem = null
     
     @Override
     def init(window: Window) = {
@@ -39,6 +41,7 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
           0.0f, 0.5f, 0.5f,
         )
         mesh = new Mesh(positions, colors, indices)
+        quad = new AnimationItem(mesh)
     }
 
     @Override
@@ -86,7 +89,8 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     @Override
     def render(window: Window) = {
         window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window, mesh);
+        var items: Array[AnimationItem] = Array(quad)
+        renderer.render(window, items);
     }
 
     @Override

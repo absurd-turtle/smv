@@ -1,11 +1,14 @@
 package smv.animations
 
-import engine.Window;
-import engine.ShaderProgram;
-import engine.Mesh;
+import engine.Window
+import engine.ShaderProgram
+import engine.Mesh
+import engine.Transformation
+import engine.AnimationItem
 import scala.io.Source
-import java.nio.FloatBuffer;
+import java.nio.FloatBuffer
 import java.io.File
+
 
 import org.lwjgl.system.MemoryUtil._
 import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -41,6 +44,7 @@ class Renderer(){
   private final val Z_NEAR: Float = 0.01f;
   private final val Z_FAR: Float = 1000;
   private var projectionMatrix: Matrix4f = null
+  private var transformation: Transformation = new Transformation()
 
   def init(window: Window) = {
     var aspectRatio: Float = window.getWidth().toFloat / window.getHeight().toFloat
@@ -60,6 +64,9 @@ class Renderer(){
     shaderProgram.link();
 
     shaderProgram.createUniform("projectionMatrix")
+    shaderProgram.createUniform("worldMatrix")
+
+    window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f)
   }
   
 
@@ -67,24 +74,36 @@ class Renderer(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  def render(window: Window, mesh: Mesh) = {
+  def render(window: Window, items: Array[AnimationItem]) = {
       clear();
 
       if (window.isResized()) {
           glViewport(0, 0, window.getWidth(), window.getHeight());
           var aspectRatio: Float = window.getWidth().toFloat / window.getHeight().toFloat
-          projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR)
           window.setResized(false);
       }
 
       shaderProgram.bind();
+
+      // Update projection Matrix
+      var projectionMatrix: Matrix4f = transformation.getProjectionMatrix(
+        FOV, 
+        window.getWidth().asInstanceOf[Float],
+        window.getHeight().asInstanceOf[Float],
+        Z_NEAR,
+        Z_FAR
+      )
       shaderProgram.setUniform("projectionMatrix", projectionMatrix)
 
-      // Draw the mesh
-      glBindVertexArray(mesh.getVaoId());
-      glEnableVertexAttribArray(0);
-      glEnableVertexAttribArray(1);
-      glDrawElements(GL_TRIANGLES, mesh.getVertexCount(), GL_UNSIGNED_INT, 0);
+      // Draw each animation item 
+      for (item <- items) {
+        var worldMatrix: Matrix4f = transformation.getWorldMatrix(
+            item.getPosition(), item.getRotation(), item.getScale()
+          )
+        shaderProgram.setUniform("worldMatrix", worldMatrix)
+        item.getMesh.render()
+      }
+
 
       // Restore state
       glDisableVertexAttribArray(0)
