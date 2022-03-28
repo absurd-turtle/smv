@@ -1,0 +1,45 @@
+# timelog for smv
+
+## 2022/03/04
+11:00
+project setup
+12:00
+-----------------------
+1h
+
+## 2022/03/05
+16:00
+feature/microphoneInput
+18:00
+-----------------------
+2h
+
+## 2022/03/11
+13:10
+calculate amplitude
+import lwjgl
+16:00
+-----------------------
+1h 50m
+
+# REPORT 1
+So far the basic project setup has been completed. 
+This includes adding a graphics library and implementing basic Microphone input.
+
+
+## 2022/03/21
+render pipeline with lwjgl and openGL
+-----------------------
+5h
+
+## 2022/03/25
+render pipeline
+-----------------------
+5h
+
+## 2022/03/28
+research and reporting
+-----------------------
+1h
+
+# REPORT 2
