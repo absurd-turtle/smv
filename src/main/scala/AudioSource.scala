@@ -50,7 +50,8 @@ class AudioSource( useMic: Boolean ) {
     // been obtained and opened.
     var out: ByteArrayOutputStream = new ByteArrayOutputStream();
     var numBytesRead: Int = 0
-    var data: Array[Byte] = new Array(line.getBufferSize() / 500);
+    // var data: Array[Byte] = new Array(line.getBufferSize() / 8 );
+    var data: Array[Byte] = new Array(256);
 
      // Read the next chunk of data from the TargetDataLine.
      // for (i <- 1 to 10) {

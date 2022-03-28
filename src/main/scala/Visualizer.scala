@@ -8,11 +8,7 @@ object Visualizer {
     audioSource.init()
     audioSource.start()
 
-    var amplitudes = audioSource.read()
-
-    for (a <- amplitudes) {
-      println(a)
-    }
+    // var amplitudes = audioSource.read()
 
     new Animation(audioSource).start()
   }
