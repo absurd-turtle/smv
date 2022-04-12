@@ -4,8 +4,6 @@ import smv.AudioSource
 import smv.animations.engine.AnimationItem
 import smv.animations.engine.Mesh
 
-import smv.animations.geometry.Quad._
-
 import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
@@ -15,7 +13,7 @@ import engine.Window;
 
 import com.meapsoft.FFT
 
-class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
+class SoundSpectrumVisualizer(audioSource: AudioSource) extends IAnimationLogic {
 
     var direction = 0;
 
@@ -28,6 +26,24 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     var quad2: AnimationItem = null
     var items: Array[AnimationItem] = null
     
+    def createQuadMesh(x: Float, y: Float, z: Float, width: Float, height: Float): Mesh = {
+        var positions: Array[Float] = Array(
+          x,        y,        z,
+          x,        y-height, z,
+          x+width,  y-height, z,
+          x+width,  y,        z,
+        )
+        var indices: Array[Int] = Array(
+          0, 1, 3, 3, 1, 2,
+        )
+        var colors: Array[Float] = Array(
+          0.5f, 0.0f, 0.0f,
+          0.0f, 0.5f, 0.0f,
+          0.0f, 0.0f, 0.5f,
+          0.0f, 0.5f, 0.5f,
+        )
+        return new Mesh(positions, colors, indices)
+    }
 
     @Override
     def init(window: Window) = {
@@ -79,7 +95,7 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
         items = new Array[AnimationItem](amplitudes.length)
         for (i <- Range(0, amplitudes.length)) {
           items(i) = new AnimationItem(
-            createQuadMesh(width * i - 1.0f, 0.0f, -1.0f, width, amplitudes(i).asInstanceOf[Float])
+            createQuadMesh(width * i - 1.0f, 0.25f, -1.0f, width, amplitudes(i).asInstanceOf[Float])
           )
         }
 

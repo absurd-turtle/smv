@@ -1,3 +1,5 @@
+package smv
+
 import smv.animations.Animation
 import smv.AudioSource
 

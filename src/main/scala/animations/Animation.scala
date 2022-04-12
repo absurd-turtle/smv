@@ -4,6 +4,7 @@ import scala.io.Source
 import smv.AudioSource
 import smv.animations.engine.AnimationEngine
 import smv.animations.DummyAnimation
+import smv.animations.mutualAttraction.MutualAttraction
 import engine.AnimationEngine
 import engine.IAnimationLogic
 import org.lwjgl.glfw._
@@ -20,7 +21,7 @@ class Animation(audioSource: AudioSource) {
     def start() = {
         try {
             var vSync: Boolean = true;
-            var animationLogic: IAnimationLogic  = new DummyAnimation(audioSource);
+            var animationLogic: IAnimationLogic  = new MutualAttraction(audioSource);
             var animationEngine: AnimationEngine  = new AnimationEngine("anim", 600, 480, vSync, animationLogic);
             animationEngine.run();
         } catch {
