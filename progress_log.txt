@@ -43,3 +43,24 @@ research and reporting
 1h
 
 # REPORT 2
+A basic 3D rendering engine has been implemented in OpenGL using the library lwjgl.
+A Java FFT algorithm has been added and tested with a basic 2D animation.
+I am lacking behind a little bit with the plan but I am certain that 
+I can manage to make up for it in the coming weeks.
+
+
+## 2022/04/07
+mutual attraction animation
+-----------------------
+4h
+
+## 2022/04/08
+mutual attraction animation
+-----------------------
+2h
+
+# REPORT 3
+Another animation has been added, inspired by the video of Daniel Shiffman. (https://www.youtube.com/watch?v=GjbKsOkN1Oc)
+There are still some basic parts missing that will be implemented in the next 2 weeks. 
+Unfortunately these features couldn't be realized sooner, as other courses required most of my time.
+
