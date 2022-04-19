@@ -23,7 +23,7 @@ lazy val os = Option(System.getProperty("os.name", ""))
   case _           => throw new Exception("Unknown platform!")
 }
 
-lazy val root = (project in file("."))
+lazy val smv = (project in file("."))
   .settings(
     name := "smv",
     version := "0.1",
@@ -45,7 +45,8 @@ lazy val root = (project in file("."))
     ),
     libraryDependencies ++= circe,
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.11",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % "test"
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % "test",
+    libraryDependencies += "info.picocli" % "picocli" % "4.6.3"
     ,
     scalacOptions ++= Seq(
       "-feature",
