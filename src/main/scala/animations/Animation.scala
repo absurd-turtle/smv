@@ -15,13 +15,15 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL20._
 import org.lwjgl.opengl.GL30._
 import java.nio.FloatBuffer
+import smv.utils.ColorTheme
 
-
-class Animation(audioSource: AudioSource) {
+class Animation(audioSource: AudioSource, colorTheme: ColorTheme) {
     def start() = {
         try {
             var vSync: Boolean = true;
-            var animationLogic: IAnimationLogic  = new MutualAttraction(audioSource);
+            // var animationLogic: IAnimationLogic  = new MutualAttraction(audioSource);
+            var animationLogic: IAnimationLogic  = new SoundSpectrumVisualizer(audioSource, colorTheme);
+            // var animationLogic: IAnimationLogic  = new RotatingCubeAnimation(audioSource);
             var animationEngine: AnimationEngine  = new AnimationEngine("anim", 600, 480, vSync, animationLogic);
             animationEngine.run();
         } catch {

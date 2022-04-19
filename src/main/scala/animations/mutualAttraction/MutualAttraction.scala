@@ -22,7 +22,8 @@ import smv.animations.geometry.VectorUtils._
 import org.joml.Vector2d
 import org.joml.Matrix2f
 import org.joml.Matrix2d
-import smv.animations.geometry.Color
+
+import smv.utils.Color
 
 class MutualAttraction(audioSource: AudioSource) extends IAnimationLogic {
 

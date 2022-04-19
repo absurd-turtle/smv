@@ -7,6 +7,13 @@ lazy val jomlGroup    = "org.joml"
 lazy val jomlArtifact = "joml"
 lazy val jomlVersion  = "1.10.4"
 
+val circeVersion = "0.14.1"
+
+val circe = Seq(
+  "io.circe" %% "circe-core",
+  "io.circe" %% "circe-generic",
+  "io.circe" %% "circe-parser"
+).map(_ % circeVersion)
 
 lazy val os = Option(System.getProperty("os.name", ""))
   .map(_.substring(0, 3).toLowerCase) match {
@@ -34,8 +41,12 @@ lazy val root = (project in file("."))
       lwjglGroup % s"$lwjglArtifact-glfw"   % lwjglVersion classifier s"natives-$os",
       lwjglGroup % s"$lwjglArtifact-assimp" % lwjglVersion classifier s"natives-$os",
       lwjglGroup % s"$lwjglArtifact-opengl" % lwjglVersion classifier s"natives-$os",
-      jomlGroup  % jomlArtifact             % jomlVersion 
+      jomlGroup  % jomlArtifact             % jomlVersion,
     ),
+    libraryDependencies ++= circe,
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.11",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % "test"
+    ,
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
