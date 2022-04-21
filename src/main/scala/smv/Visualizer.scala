@@ -59,12 +59,14 @@ class Visualizer extends Callable[Integer] {
     audioSource.init()
     audioSource.start()
 
+
+    // read user defined colortheme from file
+    // if the file cannot be read use default colortheme 
     val colortheme = ColorThemeReader.readColorTheme(colorthemeFileName)
 
-
     //create Animation
-    //TODO: create Timeline
     new Animation(audioSource, colortheme, visualizationName).start()
+    //TODO: create Timeline
 
     return 0
   }
@@ -74,13 +76,13 @@ class Visualizer extends Callable[Integer] {
     println(" ")
     println(" |> OPTIONS                             ")
     println(" |--------------------------------------")
-    println(" |- useMic:" + useMic)
-    println(" |- useLineIn: "+ useLineIn)
-    println(" |- fileName: "+ fileName)
-    println(" |- visualizationName: "+ visualizationName)
-    println(" |- timelineFileName: "+ timelineFileName)
-    println(" |- colorthemeFileName: "+ colorthemeFileName)
-    println(" |- loopAnimations: "+ loopAnimations)
+    println(" |- useMic: "              + useMic)
+    println(" |- useLineIn: "           + useLineIn)
+    println(" |- fileName: "            + fileName)
+    println(" |- visualizationName: "   + visualizationName)
+    println(" |- timelineFileName: "    + timelineFileName)
+    println(" |- colorthemeFileName: "  + colorthemeFileName)
+    println(" |- loopAnimations: "      + loopAnimations)
     println(" ")
   }
 

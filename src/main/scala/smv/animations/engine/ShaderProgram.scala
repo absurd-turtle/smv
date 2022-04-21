@@ -6,6 +6,10 @@ import org.joml.Matrix4f
 import org.lwjgl.system.MemoryStack
 import java.nio.FloatBuffer
 
+/**
+  * Wrapper class for shaders
+  *
+  */
 class ShaderProgram {
 
     private var vertexShaderId: Int = 0
