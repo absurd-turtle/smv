@@ -79,7 +79,7 @@ object ColorThemeReader {
   */
   def readColorTheme(colorthemeFileName: String): ColorTheme = {
       try {
-          ColorThemeReader.read(colorthemeFileName) match {
+          return ColorThemeReader.read(colorthemeFileName) match {
             case Right(x) => x
             case Left(x) => 
               println("Colortheme could not be read. Default colortheme will be used.")
