@@ -24,8 +24,9 @@ import org.joml.Matrix2f
 import org.joml.Matrix2d
 
 import smv.utils.Color
+import smv.utils.ColorTheme
 
-class MutualAttraction(audioSource: AudioSource) extends IAnimationLogic {
+class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends IAnimationLogic {
 
     var direction = 0;
 
@@ -40,18 +41,8 @@ class MutualAttraction(audioSource: AudioSource) extends IAnimationLogic {
     var movers: Array[Mover] = null
 
     var sun: Mover = null
-    val colors = List(
-      new Color(0.5f, 0, 0),
-      new Color(0f, 0.5f, 0),
-      new Color(0.5f, 0, 0.5f),
-      new Color(1, 0, 0),
-      new Color(0, 1, 0),
-      new Color(0, 0, 1),
-      new Color(0.5f, 0.5f, 0),
-      new Color(0.5f, 0, 0.5f),
-      new Color(0.5f, 1, 0),
-      new Color(0, 0.5f, 0.5f),
-    )
+
+    val colors: List[Color] = colorTheme.color.toList
     
     @Override
     def init(window: Window) = {

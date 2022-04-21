@@ -1,7 +1,7 @@
 package smv.utils
 import io.circe.{ Decoder, Encoder, HCursor, Json }
 import scala.math
-
+import scala.collection.mutable.HashMap
 
 case class ColorTheme(name: String, author: String, color: Array[Color])
 

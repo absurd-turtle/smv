@@ -54,11 +54,11 @@ class Renderer(){
 
     shaderProgram.createVertexShader(Source.fromFile(
       // new File(getClass.getClassLoader.getResource("/vertex.vs").getPath)
-      "/home/sam/Documents/uni/exchange_semester/courses/ps2/project/smv/src/main/resources/vertex.vs"
+      "src/main/resources/vertex.vs"
     ).mkString);
     shaderProgram.createFragmentShader(Source.fromFile(
       // new File(getClass.getClassLoader.getResource("/fragment.fs").getPath)
-      "/home/sam/Documents/uni/exchange_semester/courses/ps2/project/smv/src/main/resources/fragment.fs"
+      "src/main/resources/fragment.fs"
     ).mkString);
 
     shaderProgram.link();

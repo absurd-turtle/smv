@@ -10,10 +10,23 @@ import smv.utils.ColorTheme
 import smv.utils.Color
 import java.util.concurrent.Callable
 
+trait Options {
+  val useMic: Boolean
+  val useLineIn: Boolean
+  val fileName: String
+  val visualizationName: String
+  val timelineFileName: String
+  val colorthemeFileName: String
+  val loopAnimations: Boolean
+}
+
+
 @Command(name = "smv", mixinStandardHelpOptions = true, version = Array("smv 0.1"),
   description = Array("plays audio reactive animations"))
 class Visualizer extends Callable[Integer] {
 
+
+  //OPTIONS
   @Option(names = Array("-m", "--microphone"), description = Array("use microphone input"))
     private var useMic: Boolean = false
 
@@ -30,7 +43,7 @@ class Visualizer extends Callable[Integer] {
     private var timelineFileName: String = ""
 
   @Option(names = Array("-c", "--colortheme"), description = Array("start the application with a colortheme"))
-    private var colorthemeFileName: String = ""
+    private var colorthemeFileName: String = "monokai"
 
   @Option(names = Array("--loop"), description = Array("loop through animations"))
     private var loopAnimations: Boolean = false
@@ -38,50 +51,43 @@ class Visualizer extends Callable[Integer] {
 
   @Override
   def call(): Integer = {
-    println("This is a music visualizer")
+    printWelcomeMessage()
+    printOptions()
 
-    println("options")
-    println("useMic", useMic)
-    println("useLineIn", useLineIn)
-    println("fileName", fileName)
-    println("visualizationName", visualizationName)
-    println("timelineFileName", timelineFileName)
-    println("colorthemeFileName", colorthemeFileName)
-    println("loopAnimations", loopAnimations)
-
+    //initialize AudioSource
     var audioSource = new AudioSource(useMic || !useLineIn)
     audioSource.init()
     audioSource.start()
 
-    new Animation(audioSource, readColorTheme()).start()
+    val colortheme = ColorThemeReader.readColorTheme(colorthemeFileName)
+
+
+    //create Animation
+    //TODO: create Timeline
+    new Animation(audioSource, colortheme, visualizationName).start()
 
     return 0
   }
  
-  def readColorTheme(): ColorTheme = {
-    ColorThemeReader.read("monokai") match {
-      case Right(x) => x
-      case Left(x) => 
-        println("Colortheme could not be read. Default colortheme will be used.")
-        new ColorTheme("smv default", "smv", List(
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          new Color(1.0f, 1.0f, 1.0f),
-          ).toArray)
-    }
+
+  def printOptions() = {
+    println(" ")
+    println(" |> OPTIONS                             ")
+    println(" |--------------------------------------")
+    println(" |- useMic:" + useMic)
+    println(" |- useLineIn: "+ useLineIn)
+    println(" |- fileName: "+ fileName)
+    println(" |- visualizationName: "+ visualizationName)
+    println(" |- timelineFileName: "+ timelineFileName)
+    println(" |- colorthemeFileName: "+ colorthemeFileName)
+    println(" |- loopAnimations: "+ loopAnimations)
+    println(" ")
+  }
+
+  def printWelcomeMessage() ={
+    println("<|-------------------------------------|>")
+    println(" | starting smv: some music visualizer | ")
+    println("<|-------------------------------------|>")
   }
 }
 

@@ -15,12 +15,18 @@ import smv.animations.geometry.Quad.createQuadMesh
 
 import com.meapsoft.FFT
 import smv.utils.ColorTheme
+import smv.utils.ColorThemeReader
 
 class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, movingColors: Boolean = true) extends IAnimationLogic {
 
-    var color = 0.0f;
+    var color = colorTheme.color(0);
     var colorOffset = 0
     var colorOffsetCounter = 0
+
+    var changeColorTheme = 0
+    var themeId = 0
+
+    var ct: ColorTheme = colorTheme
     
     var renderer: Renderer = new Renderer()
 
@@ -37,6 +43,13 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
           cleanup()
           System.exit(0);
         }
+        if (window.isKeyPressed(GLFW_KEY_UP)) {
+            changeColorTheme = 1;
+        } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
+            changeColorTheme = -1;
+        } else {
+            changeColorTheme = 0;
+        }
     }
 
     @Override
@@ -47,6 +60,12 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
             colorOffsetCounter = 0
             colorOffset = colorOffset + 1
           }
+        }
+
+        if(changeColorTheme != 0){
+          themeId = themeId + 1
+          ct = ColorThemeReader.getKnownTheme(themeId % ColorThemeReader.getKnownThemeCount())
+          color = ct.color(0)
         }
 
         val amplitudes = audioSource.read()
@@ -64,11 +83,11 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
         for (i <- Range(0, amplitudes.length)) {
           items(i) = new AnimationItem(
             createQuadMesh(width * i - 1.0f, 0.0f, -1.0f, width, amplitudes(i).asInstanceOf[Float],
-              true, colorTheme.color((colorIndex + colorOffset) % colorTheme.color.length))
+              true, ct.color((colorIndex + colorOffset) % (ct.color.length - 1) + 1 ))
           )
 
           colorCount = colorCount + 1
-          if(colorCount > amplitudes.length/colorTheme.color.length){
+          if(colorCount > amplitudes.length/ct.color.length){
             colorCount = 0
             colorIndex = colorIndex + 1
           }
@@ -77,7 +96,7 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
 
     @Override
     def render(window: Window) = {
-        window.setClearColor(color, color, color, 0.0f);
+        window.setClearColor(color.r, color.g, color.b, 1.0f);
         renderer.render(window, items);
     }
 
