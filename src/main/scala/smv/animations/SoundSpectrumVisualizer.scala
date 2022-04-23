@@ -52,6 +52,18 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
         }
     }
 
+    def getAmplitudes() = synchronized {
+      audioSource.getAudioBuffer().clone()
+    }
+
+    def performFFT(amplitudes: Array[Double]) = {
+        //TODO: move this part to AudioSource or new Class AudioAnalyzer
+        var fft = new FFT(amplitudes.length)
+        var im = (for (x <- Range(0, amplitudes.length))
+          yield 0.0).toArray
+        fft.fft(amplitudes, im)
+    }
+
     @Override
     def update(interval: Float) = {
         if ( movingColors ){
@@ -68,14 +80,11 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
           color = ct.color(0)
         }
 
-        val amplitudes = audioSource.read()
-        
-        //TODO: move this part to AudioSource or new Class AudioAnalyzer
-        var fft = new FFT(amplitudes.length)
-        var im = (for (x <- Range(0, amplitudes.length))
-          yield 0.0).toArray
-        fft.fft(amplitudes, im)
+        val amplitudes = getAmplitudes()
+        performFFT(amplitudes)
 
+
+        //Draw quads
         val width = 2.0f/amplitudes.length
         items = new Array[AnimationItem](amplitudes.length)
         var colorCount = 0

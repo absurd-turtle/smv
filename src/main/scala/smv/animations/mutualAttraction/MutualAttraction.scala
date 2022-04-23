@@ -80,7 +80,7 @@ class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends
 
     @Override
     def update(interval: Float) = {
-        val amplitudes = audioSource.read()
+        val amplitudes = audioSource.getAudioBuffer().clone()
         
         //TODO: move this part to AudioSource or new Class AudioAnalyzer
         var fft = new FFT(amplitudes.length)

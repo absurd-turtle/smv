@@ -48,6 +48,7 @@ class Visualizer extends Callable[Integer] {
   @Option(names = Array("--loop"), description = Array("loop through animations"))
     private var loopAnimations: Boolean = false
 
+  var audioThread: Thread = null
 
   @Override
   def call(): Integer = {
@@ -55,10 +56,11 @@ class Visualizer extends Callable[Integer] {
     printOptions()
 
     //initialize AudioSource
-    var audioSource = new AudioSource(useMic || !useLineIn)
+    val source = if (useMic) "mic" else if (useLineIn) "line-in" else if (fileName != "") "file" else "mic"
+    var audioSource = new AudioSource(source, fileName)
     audioSource.init()
-    audioSource.start()
-
+    audioThread = new Thread(audioSource)
+    audioThread.start()
 
     // read user defined colortheme from file
     // if the file cannot be read use default colortheme 
