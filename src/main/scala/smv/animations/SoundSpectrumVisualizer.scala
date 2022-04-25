@@ -7,6 +7,7 @@ import smv.animations.engine.Mesh
 import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import org.lwjgl.glfw.GLFW.GLFW_KEY_M;
 
 import engine.IAnimationLogic;
 import engine.Window;
@@ -17,7 +18,7 @@ import com.meapsoft.FFT
 import smv.utils.ColorTheme
 import smv.utils.ColorThemeReader
 
-class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, movingColors: Boolean = true) extends IAnimationLogic {
+class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, moveColors: Boolean = true) extends IAnimationLogic {
 
     var color = colorTheme.color(0);
     var colorOffset = 0
@@ -31,6 +32,8 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
     var renderer: Renderer = new Renderer()
 
     var items: Array[AnimationItem] = null
+
+    var movingColors: Boolean = moveColors
     
     @Override
     def init(window: Window) = {
@@ -43,13 +46,17 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
           cleanup()
           System.exit(0);
         }
-        if (window.isKeyPressed(GLFW_KEY_UP)) {
+        else if (window.isKeyPressed(GLFW_KEY_UP)) {
             changeColorTheme = 1;
         } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
             changeColorTheme = -1;
         } else {
             changeColorTheme = 0;
         }
+        if (window.isKeyPressed(GLFW_KEY_M)){
+            this.movingColors = !movingColors
+        }
+
     }
 
     def getAmplitudes() = synchronized {
@@ -86,9 +93,19 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
 
         //Draw quads
         val width = 2.0f/amplitudes.length
+        
+
+        //TODO: increase effiency by reusing the items instead of creating new ones
+        if(items != null && items.length > 0){
+          for (item <- items) {
+            item.getMesh().cleanUp()
+          }
+        }
+
         items = new Array[AnimationItem](amplitudes.length)
         var colorCount = 0
         var colorIndex = 0
+
         for (i <- Range(0, amplitudes.length)) {
           items(i) = new AnimationItem(
             createQuadMesh(width * i - 1.0f, 0.0f, -1.0f, width, amplitudes(i).asInstanceOf[Float],
