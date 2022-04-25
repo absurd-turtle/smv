@@ -31,9 +31,24 @@ object ColorThemeReader {
   * @param fileName
   * @return
   */
- def read(fileName: String) = {
+ def readFromResource(themeName: String) = {
+    val jsonString: String = Source.fromResource(
+        "colorthemes/" + themeName + ".json"
+      ).mkString
+    parseJson(jsonString)
+  }
+
+
+ /**
+  * read a colortheme in json format from the filesystem
+  * throws error if it cannot find the file or the parsing failed
+  *
+  * @param fileName
+  * @return
+  */
+ def readFromFile(filePath: String) = {
     val jsonString: String = Source.fromFile(
-        "src/main/resources/colorthemes/" + fileName + ".json"
+        filePath
       ).mkString
     parseJson(jsonString)
   }
@@ -77,9 +92,14 @@ object ColorThemeReader {
   * @param colorthemeFileName
   * @return read or default colortheme
   */
-  def readColorTheme(colorthemeFileName: String): ColorTheme = {
+  def readColorTheme(colorthemeFileName: String, readFromResource: Boolean = true): ColorTheme = {
       try {
-          return ColorThemeReader.read(colorthemeFileName) match {
+          val ct = if(readFromResource) 
+            ColorThemeReader.readFromResource(colorthemeFileName)
+            else 
+            ColorThemeReader.readFromFile(colorthemeFileName)
+
+          return ct match {
             case Right(x) => x
             case Left(x) => 
               println("Colortheme could not be read. Default colortheme will be used.")

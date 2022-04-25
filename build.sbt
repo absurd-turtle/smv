@@ -46,8 +46,7 @@ lazy val smv = (project in file("."))
     libraryDependencies ++= circe,
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.11",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % "test",
-    libraryDependencies += "info.picocli" % "picocli" % "4.6.3"
-    ,
+    libraryDependencies += "info.picocli" % "picocli" % "4.6.3",
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation",
@@ -63,3 +62,8 @@ lazy val smv = (project in file("."))
         Nil
     }
   )
+
+assemblyMergeStrategy in assembly := {
+     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+     case x => MergeStrategy.first
+}

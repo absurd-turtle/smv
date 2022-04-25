@@ -64,7 +64,7 @@ class Visualizer extends Callable[Integer] {
 
     // read user defined colortheme from file
     // if the file cannot be read use default colortheme 
-    val colortheme = ColorThemeReader.readColorTheme(colorthemeFileName)
+    val colortheme = ColorThemeReader.readColorTheme(colorthemeFileName, false)
 
     //create Animation
     new Animation(audioSource, colortheme, visualizationName).start()

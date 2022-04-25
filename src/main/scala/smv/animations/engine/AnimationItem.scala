@@ -36,7 +36,7 @@ class AnimationItem(private final val mesh: Mesh) {
     rotation.z = z
   }
 
-  def getMesh: Mesh = {
+  def getMesh(): Mesh = {
     return mesh
   }
 }

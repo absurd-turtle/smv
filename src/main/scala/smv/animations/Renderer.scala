@@ -52,13 +52,15 @@ class Renderer(){
 
     shaderProgram = new ShaderProgram()
 
-    shaderProgram.createVertexShader(Source.fromFile(
+    shaderProgram.createVertexShader(Source.fromResource(
+      "vertex.vs"
       // new File(getClass.getClassLoader.getResource("/vertex.vs").getPath)
-      "src/main/resources/vertex.vs"
+      // "src/main/resources/vertex.vs"
     ).mkString);
-    shaderProgram.createFragmentShader(Source.fromFile(
+    shaderProgram.createFragmentShader(Source.fromResource(
+      "fragment.fs"
       // new File(getClass.getClassLoader.getResource("/fragment.fs").getPath)
-      "src/main/resources/fragment.fs"
+      // "src/main/resources/fragment.fs"
     ).mkString);
 
     shaderProgram.link();
@@ -101,7 +103,7 @@ class Renderer(){
             item.getPosition(), item.getRotation(), item.getScale()
           )
         shaderProgram.setUniform("worldMatrix", worldMatrix)
-        item.getMesh.render()
+        item.getMesh().render()
       }
 
 
