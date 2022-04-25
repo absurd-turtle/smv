@@ -99,6 +99,10 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
     while(!stopped) {
       // writing current input to the parameter out
       writeToOut(read())
+      if(source == "file"){
+        //update buffer up to 100 times per second
+        Thread.sleep(10)
+      }
     }
     if (source == "file"){
       println("done reading file")
@@ -123,7 +127,6 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
   def read(): Array[Double] = {
     source match {
       case "file" => {
-
         var playerOut = player.getOutput()
         byteToDouble16Mono(
           playerOut
