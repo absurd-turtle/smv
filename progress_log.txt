@@ -64,3 +64,46 @@ Another animation has been added, inspired by the video of Daniel Shiffman. (htt
 There are still some basic parts missing that will be implemented in the next 2 weeks. 
 Unfortunately these features couldn't be realized sooner, as other courses required most of my time.
 
+## 2022/04/18
+
+colorThemes
+-----------------------
+4h
+
+rotating cube animation
+-----------------------
+2h
+
+## 2022/04/19
+
+colorThemes
+-----------------------
+1h
+
+cli
+-----------------------
+2h
+
+
+## 2022/04/21
+audio, refactor, debugging sbt package
+----------------------
+4h
+
+
+## 2022/04/22
+audio
+----------------------
+4h
+
+## 2022/04/23
+bugfixes
+----------------------
+3h
+
+
+## 2022/04/25
+sbt assembly, fix relative paths
+----------------------
+3h
+
