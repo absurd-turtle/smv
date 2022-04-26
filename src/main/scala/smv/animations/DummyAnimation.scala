@@ -6,20 +6,20 @@ import smv.animations.engine.Mesh
 
 import smv.animations.geometry.Quad._
 
-import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
 
-import engine.IAnimationLogic;
-import engine.Window;
+import engine.IAnimationLogic
+import engine.Window
 
 import com.meapsoft.FFT
 
 class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
 
-    var direction = 0;
+    var direction = 0
 
-    var color = 0.0f;
+    var color = 0.0f
     
     var renderer: Renderer = new Renderer()
 
@@ -31,7 +31,7 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
 
     @Override
     def init(window: Window) = {
-        renderer.init(window);
+        renderer.init(window)
         val gap: Float = 0.1f
         quad1 = new AnimationItem(createQuadMesh(-0.5f - gap/2, 0.25f, -1.0f, 0.5f, 0.5f ))
         quad2 = new AnimationItem(createQuadMesh(0f + gap/2, 0.25f, -1.0f, 0.5f, 0.5f ))
@@ -41,25 +41,25 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
     def input(window: Window) = {
         if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
           cleanup()
-          System.exit(0);
+          System.exit(0)
         }
 
         if (window.isKeyPressed(GLFW_KEY_UP)) {
-            direction = 1;
+            direction = 1
         } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-            direction = -1;
+            direction = -1
         } else {
-            direction = 0;
+            direction = 0
         }
     }
 
     @Override
     def update(interval: Float) = {
-        color += direction * 0.01f;
+        color += direction * 0.01f
         if (color > 1) {
-            color = 1.0f;
+            color = 1.0f
         } else if (color < 0) {
-            color = 0.0f;
+            color = 0.0f
         }
 
         val amplitudes = audioSource.read()
@@ -106,13 +106,13 @@ class DummyAnimation(audioSource: AudioSource) extends IAnimationLogic {
 
     @Override
     def render(window: Window) = {
-        window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window, items);
+        window.setClearColor(color, color, color, 0.0f)
+        renderer.render(window, items)
     }
 
     @Override
     def cleanup() = {
-        renderer.cleanup();
+        renderer.cleanup()
     }
 
 }

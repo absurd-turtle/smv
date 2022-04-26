@@ -28,17 +28,17 @@ import smv.utils.ColorTheme
 class Animation(audioSource: AudioSource, colorTheme: ColorTheme, visualizationName: String) {
     def start() = {
         try {
-            var vSync: Boolean = true;
+            var vSync: Boolean = true
 
             // fetch animation
             var animationLogic = matchAnimationLogic(visualizationName, audioSource, colorTheme)
 
-            initAnimationEngine(vSync, animationLogic).run();
+            initAnimationEngine(vSync, animationLogic).run()
 
         } catch {
           case e: Exception => { 
-            e.printStackTrace();
-            System.exit(-1);
+            e.printStackTrace()
+            System.exit(-1)
           }
         }
     }
@@ -53,7 +53,7 @@ class Animation(audioSource: AudioSource, colorTheme: ColorTheme, visualizationN
     */
     def matchAnimationLogic(visualizationName: String, audioSource: AudioSource, colorTheme: ColorTheme): IAnimationLogic = {
       visualizationName match {
-        case x if (x == "SoundSpectrumVisualizer" || x == "0") => new SoundSpectrumVisualizer(audioSource, colorTheme, true)
+        case x if (x == "SoundSpectrumVisualizer" || x == "0") => new SoundSpectrumVisualizer(audioSource, colorTheme, false)
         case x if (x == "MutualAttraction"        || x == "1") => new MutualAttraction(audioSource, colorTheme)
         // case x if (x == "RotatingCubeAnimation"   || x == "2") => new RotatingCubeAnimation(audioSource, colorTheme)
         case _ => new SoundSpectrumVisualizer(audioSource, colorTheme)

@@ -5,6 +5,9 @@ import smv.utils.Color
 
 object Quad {
   def createQuadMesh(x: Float, y: Float, z: Float, width: Float, height: Float, center: Boolean = true, color: Color = null): Mesh = {
+
+      // set positions of the quad
+      // when center is true, the position given is the center of the Quad otherwise the position is the left top corner
       var positions: Array[Float] = if (center) 
       Array(
         x-width/2, y+height/2, z,
@@ -22,6 +25,7 @@ object Quad {
       var indices: Array[Int] = Array(
         0, 1, 3, 3, 1, 2,
       )
+
       var colors: Array[Float] = 
       if ( color != null)
       Array(

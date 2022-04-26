@@ -4,13 +4,13 @@ import smv.AudioSource
 import smv.animations.engine.AnimationItem
 import smv.animations.engine.Mesh
 
-import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_M;
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
+import org.lwjgl.glfw.GLFW.GLFW_KEY_M
 
-import engine.IAnimationLogic;
-import engine.Window;
+import engine.IAnimationLogic
+import engine.Window
 
 import smv.animations.geometry.Quad.createQuadMesh
 
@@ -20,7 +20,7 @@ import smv.utils.ColorThemeReader
 
 class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, moveColors: Boolean = true) extends IAnimationLogic {
 
-    var color = colorTheme.color(0);
+    var color = colorTheme.color(0)
     var colorOffset = 0
     var colorOffsetCounter = 0
 
@@ -37,21 +37,21 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
     
     @Override
     def init(window: Window) = {
-        renderer.init(window);
+        renderer.init(window)
     }
 
     @Override
     def input(window: Window) = {
         if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
           cleanup()
-          System.exit(0);
+          System.exit(0)
         }
         else if (window.isKeyPressed(GLFW_KEY_UP)) {
-            changeColorTheme = 1;
+            changeColorTheme = 1
         } else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-            changeColorTheme = -1;
+            changeColorTheme = -1
         } else {
-            changeColorTheme = 0;
+            changeColorTheme = 0
         }
         if (window.isKeyPressed(GLFW_KEY_M)){
             this.movingColors = !movingColors
@@ -122,13 +122,13 @@ class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, 
 
     @Override
     def render(window: Window) = {
-        window.setClearColor(color.r, color.g, color.b, 1.0f);
-        renderer.render(window, items);
+        window.setClearColor(color.r, color.g, color.b, 1.0f)
+        renderer.render(window, items)
     }
 
     @Override
     def cleanup() = {
-        renderer.cleanup();
+        renderer.cleanup()
     }
 
 }

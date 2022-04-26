@@ -5,8 +5,11 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import smv.audio.SimpleAudioPlayer
 
+
+// Wrapper class for the SimpleAudioPlayer
+// It is used to make it run as a Thread
 class Player(fileName: String, bufferSize: Int) extends Runnable {
-  var player: SimpleAudioPlayer = new SimpleAudioPlayer(bufferSize);
+  var player: SimpleAudioPlayer = new SimpleAudioPlayer(bufferSize)
 
   override def run(): Unit = {
     player.play(fileName)
@@ -18,6 +21,12 @@ class Player(fileName: String, bufferSize: Int) extends Runnable {
 }
 
 
+/**
+  * AudioSource is an adapter class for different audio sources like microphone, line-in and wav files
+  *
+  * @param source name of the source used ("mic", "line-in", "file")
+  * @param fileName If "file" is chosen as source, the file path is required
+  */
 class AudioSource( source: String, fileName: String = "" ) extends Runnable {
 
   var line: TargetDataLine = null
@@ -30,11 +39,20 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
   var byteOut = new Array[Byte](256)
   var out: Array[Double] = new Array(128)
 
+  /**
+  * Method which opens the standard microphone of the OS
+  *
+  * @param format
+  * @return TargetDataLine of the microphone
+  */
   def openMic(format: AudioFormat) = {
-     // AudioSystem.getLine(Port.Info.MICROPHONE).asInstanceOf[TargetDataLine]
      AudioSystem.getTargetDataLine(format).asInstanceOf[TargetDataLine]
   }
 
+  // TODO: let the user choose from available mixers
+  /**
+  * prints all the available mixers 
+  */
   def printMixers() = {
      var mixerInfos = AudioSystem.getMixerInfo()
      for (info <- mixerInfos){
@@ -54,6 +72,9 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
      }
   }
 
+  /**
+  * initialize AudioSource
+  */
   def init() = {
     var format: AudioFormat = new AudioFormat(44100, sampleSize, 1, false, true)
 
@@ -61,11 +82,12 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
     try {
       source match {
         case "mic" => {
-          if (!AudioSystem.isLineSupported(Port.Info.MICROPHONE)){
-            System.err.println("[error] Error initiliazing AudioSource. System does not support a microphone.")
-          }
+          // doesn't work as expected
+          // if (!AudioSystem.isLineSupported(Port.Info.MICROPHONE)){
+          //   System.err.println("[error] Error initiliazing AudioSource. System does not support a microphone.")
+          // }
           line = openMic(format)
-          line.open(format);
+          line.open(format)
           line.start()
         }
         case "line-in" => {
@@ -73,8 +95,8 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
           if (!AudioSystem.isLineSupported(info)){
             System.err.println("[error] Error initiliazing AudioSource. System does not support line-in with " + info + ".")
           }
-          line = AudioSystem.getLine(info).asInstanceOf[TargetDataLine];
-          line.open(format);
+          line = AudioSystem.getLine(info).asInstanceOf[TargetDataLine]
+          line.open(format)
         }
         case "file" => {
           player = new Player(fileName, 256)
@@ -82,15 +104,26 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
         }
       }
     } catch {
-      case ex:LineUnavailableException => ???
-      //TODO: Handle the error ... 
+      case ex:LineUnavailableException =>
+        System.err.println("The chosen Line/Source is not available.")
     }
   }
 
+  /**
+  * synchronized method to write the current data to the variable "out" which is used as "shared data" between different threads
+  *
+  * @param data
+  */
   def writeToOut(data: Array[Double]) = synchronized {
     out = data
   }
 
+
+  /**
+  * synchronized method to get the current audio data 
+  *
+  * @param data
+  */
   def getAudioBuffer(): Array[Double] = synchronized {
     return out
   }
@@ -116,18 +149,27 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
     stopped = true
   }
 
+  // translate two bytes of audio data to one double value
   def getAmplitude(b1: Byte, b2: Byte): Double = {
-    (b2 << 8 | b1 & 0xFF) / 32767.0;
+    (b2 << 8 | b1 & 0xFF) / 32767.0
   }
 
+  // translate one byte of audio data to one double value
   def getAmplitude(b1: Byte): Double = {
-    (b1 & 0xFF) / 256.0;
+    (b1 & 0xFF) / 256.0
   }
 
+  /**
+  * read data from the audio feed
+  *
+  * @return
+  */
   def read(): Array[Double] = {
     source match {
       case "file" => {
+        // get current output from the File Player
         var playerOut = player.getOutput()
+        // currently the application assumes that when content from a file is read one sample is 16 bit in size and mono (1 channel)
         byteToDouble16Mono(
           playerOut
         )
@@ -136,15 +178,20 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
     }
   }
 
+  /**
+  * read samples from the TargetDataLine
+  *
+  * @return
+  */
   def readFromLine(): Array[Double] = {
     // number of bytes that got read from line
     var numBytesRead: Int = 0
 
     // byte array of data that was read from the line
-    var data: Array[Byte] = new Array(256);
+    var data: Array[Byte] = new Array(256)
 
     // Read the next chunk of data from the TargetDataLine.
-    numBytesRead = line.read(data, 0, data.length);
+    numBytesRead = line.read(data, 0, data.length)
 
     // when sample size is 16 each byte pair represents one sample point.
     // the byte pair will be converted to one double representing the amplitude of that sample
@@ -157,6 +204,12 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
     }
   }
 
+  /**
+  * Translate array of byte data (16 bit mono) to double array
+  *
+  * @param data
+  * @return
+  */
   def byteToDouble16Mono(data: Array[Byte]): Array[Double] = {
       var amplitudes: Array[Double] = new Array(data.size / 2)
       for (i <- data.indices) {
@@ -167,6 +220,12 @@ class AudioSource( source: String, fileName: String = "" ) extends Runnable {
       return amplitudes
   }
 
+  /**
+  * Translate array of byte data (8 bit mono) to double array
+  *
+  * @param data
+  * @return
+  */
   def byteToDouble8Mono(data: Array[Byte]): Array[Double] = {
       var amplitudes: Array[Double] = new Array(data.size)
       amplitudes = data.map(b => getAmplitude(b))

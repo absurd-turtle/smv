@@ -4,12 +4,12 @@ import smv.AudioSource
 import smv.animations.engine.AnimationItem
 import smv.animations.engine.Mesh
 
-import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN
+import org.lwjgl.glfw.GLFW.GLFW_KEY_UP
+import org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE
 
-import smv.animations.engine.IAnimationLogic;
-import smv.animations.engine.Window;
+import smv.animations.engine.IAnimationLogic
+import smv.animations.engine.Window
 
 import smv.animations.geometry.Quad._
 
@@ -28,9 +28,9 @@ import smv.utils.ColorTheme
 
 class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends IAnimationLogic {
 
-    var direction = 0;
+    var direction = 0
 
-    var color = 0.0f;
+    var color = 0.0f
     
     var renderer: Renderer = new Renderer()
 
@@ -46,7 +46,7 @@ class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends
     
     @Override
     def init(window: Window) = {
-        renderer.init(window);
+        renderer.init(window)
         movers = new Array[Mover](10)
 
         
@@ -60,10 +60,9 @@ class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends
           // pos.setMag(100)
           // pos = pos.mul(magnitudeFactor(pos, 0.01))
 
-          // vel.rotate(PI / 2);
           // rotate 90 degrees
           vel = vel.mulTranspose(new Matrix2d(0, -1, 1, 0))
-          var m = 10;
+          var m = 10
           movers(i) = new Mover(pos.x, pos.y, vel.x, vel.y, m )
         }
 
@@ -74,7 +73,7 @@ class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends
     def input(window: Window) = {
         if (window.isKeyPressed(GLFW_KEY_ESCAPE)) {
           cleanup()
-          System.exit(0);
+          System.exit(0)
         }
     }
 
@@ -119,13 +118,13 @@ class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends
 
     @Override
     def render(window: Window) = {
-        window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window, items);
+        window.setClearColor(color, color, color, 0.0f)
+        renderer.render(window, items)
     }
 
     @Override
     def cleanup() = {
-        renderer.cleanup();
+        renderer.cleanup()
     }
 
 }

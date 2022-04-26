@@ -11,26 +11,26 @@ import java.io.File
 
 
 import org.lwjgl.system.MemoryUtil._
-import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import org.lwjgl.opengl.GL11.GL_FLOAT;
-import org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
-import org.lwjgl.opengl.GL11.glClear;
-import org.lwjgl.opengl.GL11.glDrawElements;
-import org.lwjgl.opengl.GL11.glViewport;
-import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
-import org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
-import org.lwjgl.opengl.GL15.glBindBuffer;
-import org.lwjgl.opengl.GL15.glBufferData;
-import org.lwjgl.opengl.GL15.glDeleteBuffers;
-import org.lwjgl.opengl.GL15.glGenBuffers;
-import org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import org.lwjgl.opengl.GL30.glBindVertexArray;
-import org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import org.lwjgl.opengl.GL30.glGenVertexArrays;
+import org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT
+import org.lwjgl.opengl.GL11.GL_FLOAT
+import org.lwjgl.opengl.GL11.GL_TRIANGLES
+import org.lwjgl.opengl.GL11.GL_UNSIGNED_INT
+import org.lwjgl.opengl.GL11.glClear
+import org.lwjgl.opengl.GL11.glDrawElements
+import org.lwjgl.opengl.GL11.glViewport
+import org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER
+import org.lwjgl.opengl.GL15.GL_STATIC_DRAW
+import org.lwjgl.opengl.GL15.glBindBuffer
+import org.lwjgl.opengl.GL15.glBufferData
+import org.lwjgl.opengl.GL15.glDeleteBuffers
+import org.lwjgl.opengl.GL15.glGenBuffers
+import org.lwjgl.opengl.GL20.glDisableVertexAttribArray
+import org.lwjgl.opengl.GL20.glEnableVertexAttribArray
+import org.lwjgl.opengl.GL20.glVertexAttribPointer
+import org.lwjgl.opengl.GL30.glBindVertexArray
+import org.lwjgl.opengl.GL30.glDeleteVertexArrays
+import org.lwjgl.opengl.GL30.glGenVertexArrays
 import org.lwjgl.system.MemoryUtil
 import org.joml.Matrix4f
 import scala.math
@@ -41,8 +41,8 @@ class Renderer(){
   private var shaderProgram: ShaderProgram = null
 
   private final val FOV: Float = math.toRadians(60.0f).asInstanceOf[Float]
-  private final val Z_NEAR: Float = 0.01f;
-  private final val Z_FAR: Float = 1000;
+  private final val Z_NEAR: Float = 0.01f
+  private final val Z_FAR: Float = 1000
   private var projectionMatrix: Matrix4f = null
   private var transformation: Transformation = new Transformation()
 
@@ -54,16 +54,12 @@ class Renderer(){
 
     shaderProgram.createVertexShader(Source.fromResource(
       "vertex.vs"
-      // new File(getClass.getClassLoader.getResource("/vertex.vs").getPath)
-      // "src/main/resources/vertex.vs"
-    ).mkString);
+    ).mkString)
     shaderProgram.createFragmentShader(Source.fromResource(
       "fragment.fs"
-      // new File(getClass.getClassLoader.getResource("/fragment.fs").getPath)
-      // "src/main/resources/fragment.fs"
-    ).mkString);
+    ).mkString)
 
-    shaderProgram.link();
+    shaderProgram.link()
 
     shaderProgram.createUniform("projectionMatrix")
     shaderProgram.createUniform("worldMatrix")
@@ -73,19 +69,19 @@ class Renderer(){
   
 
   def clear() = {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
   }
 
   def render(window: Window, items: Array[AnimationItem]) = {
-      clear();
+      clear()
 
       if (window.isResized()) {
-          glViewport(0, 0, window.getWidth(), window.getHeight());
+          glViewport(0, 0, window.getWidth(), window.getHeight())
           var aspectRatio: Float = window.getWidth().toFloat / window.getHeight().toFloat
-          window.setResized(false);
+          window.setResized(false)
       }
 
-      shaderProgram.bind();
+      shaderProgram.bind()
 
       // Update projection Matrix
       var projectionMatrix: Matrix4f = transformation.getProjectionMatrix(
@@ -109,14 +105,14 @@ class Renderer(){
 
       // Restore state
       glDisableVertexAttribArray(0)
-      glBindVertexArray(0);
+      glBindVertexArray(0)
 
-      shaderProgram.unbind();
+      shaderProgram.unbind()
   }
 
   def cleanup() = {
       if (shaderProgram != null) {
-          shaderProgram.cleanup();
+          shaderProgram.cleanup()
       }
   }
 }

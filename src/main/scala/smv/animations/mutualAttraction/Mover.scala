@@ -4,6 +4,7 @@ import org.joml.Vector2d
 import scala.math
 import smv.animations.engine.Mesh
 import smv.animations.geometry.VectorUtils._
+
 class Mover(x: Double, y: Double, vx: Double, vy: Double, m: Double) {
   var pos = new Vector2d(x, y)
   var vel = new Vector2d(vx, vy)
@@ -18,19 +19,15 @@ class Mover(x: Double, y: Double, vx: Double, vy: Double, m: Double) {
     acc.add(f)
   }
 
-
   def constrain(amt: Double, min: Double, max: Double): Double = {
     if (amt < min) min else if (amt > max) max else amt
   }
 
-
   def attract(mover: Mover) = {
     var force = pos.sub(mover.pos)
-    // print("force", force)
     var distanceSq = constrain(force.lengthSquared(), 100, 1000)
     var strength = (G * (mass * mover.mass)) / distanceSq
     force = force.mul(magnitudeFactor(force, strength))
-    // print("force", force)
     mover.applyForce(force)
   }
 
