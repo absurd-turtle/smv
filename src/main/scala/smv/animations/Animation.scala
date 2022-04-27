@@ -54,8 +54,8 @@ class Animation(audioSource: AudioSource, colorTheme: ColorTheme, visualizationN
       visualizationName match {
         case x if (x == "SoundSpectrumVisualizer" || x == "0") => new SoundSpectrumVisualizer(audioSource, colorTheme, false)
         case x if (x == "MutualAttraction"        || x == "1") => new MutualAttraction(audioSource, colorTheme)
-        // case x if (x == "RotatingCubeAnimation"   || x == "2") => new RotatingCubeAnimation(audioSource, colorTheme)
-        case _ => new SoundSpectrumVisualizer(audioSource, colorTheme)
+        case x if (x == "BandVisualizer"   || x == "2") => new BandVisualizer(audioSource, colorTheme)
+        case _ => new BandVisualizer(audioSource, colorTheme)
       }
     }
 
