@@ -23,8 +23,8 @@ import org.joml.Vector2d
 import org.joml.Matrix2f
 import org.joml.Matrix2d
 
-import smv.utils.Color
-import smv.utils.ColorTheme
+import smv.color.Color
+import smv.color.ColorTheme
 
 class MutualAttraction(audioSource: AudioSource, colorTheme: ColorTheme) extends IAnimationLogic {
 

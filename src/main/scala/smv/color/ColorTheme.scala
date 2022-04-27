@@ -1,4 +1,4 @@
-package smv.utils
+package smv.color
 import io.circe.{ Decoder, Encoder, HCursor, Json }
 import scala.math
 import scala.collection.mutable.HashMap

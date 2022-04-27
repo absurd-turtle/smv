@@ -1,10 +1,10 @@
-package smv.utils
+package smv.color
 
 import io.circe.Json
 import io.circe.syntax._
 import io.circe.parser._
-import smv.utils.ColorTheme
-import smv.utils.ColorTheme._
+import smv.color.ColorTheme
+import smv.color.ColorTheme._
 import scala.io.Source
 import scala.collection.mutable.HashMap
 import java.io.FileNotFoundException

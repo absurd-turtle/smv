@@ -5,9 +5,9 @@ import picocli.CommandLine.{Command, Option, Parameters}
 
 import smv.animations.Animation
 import smv.AudioSource
-import smv.utils.ColorThemeReader
-import smv.utils.ColorTheme
-import smv.utils.Color
+import smv.color.ColorThemeReader
+import smv.color.ColorTheme
+import smv.color.Color
 import java.util.concurrent.Callable
 
 trait Options {

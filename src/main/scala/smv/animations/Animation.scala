@@ -5,7 +5,6 @@ import smv.AudioSource
 import smv.animations.engine.AnimationEngine
 import smv.animations.DummyAnimation
 import smv.animations.mutualAttraction.MutualAttraction
-import engine.AnimationEngine
 import engine.IAnimationLogic
 import org.lwjgl.glfw._
 import org.lwjgl.glfw.GLFW._
@@ -15,7 +14,7 @@ import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL20._
 import org.lwjgl.opengl.GL30._
 import java.nio.FloatBuffer
-import smv.utils.ColorTheme
+import smv.color.ColorTheme
 
 
 /**

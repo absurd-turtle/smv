@@ -15,8 +15,8 @@ import engine.Window
 import smv.animations.geometry.Quad.createQuadMesh
 
 import com.meapsoft.FFT
-import smv.utils.ColorTheme
-import smv.utils.ColorThemeReader
+import smv.color.ColorTheme
+import smv.color.ColorThemeReader
 
 class SoundSpectrumVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, moveColors: Boolean = true) extends IAnimationLogic {
 

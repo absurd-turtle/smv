@@ -1,7 +1,7 @@
 package smv.animations.geometry
 
 import smv.animations.engine.Mesh
-import smv.utils.Color
+import smv.color.Color
 
 object Quad {
   def createQuadMesh(x: Float, y: Float, z: Float, width: Float, height: Float, center: Boolean = true, color: Color = null): Mesh = {
