@@ -10,7 +10,7 @@ class Mover(x: Double, y: Double, vx: Double, vy: Double, m: Double) {
   var vel = new Vector2d(vx, vy)
   var acc = new Vector2d(0, 0)
   var mass = m
-  val G = 1
+  val G = 0.005f
 
   var r = math.sqrt(mass) * 2
 
@@ -19,13 +19,10 @@ class Mover(x: Double, y: Double, vx: Double, vy: Double, m: Double) {
     acc.add(f)
   }
 
-  def constrain(amt: Double, min: Double, max: Double): Double = {
-    if (amt < min) min else if (amt > max) max else amt
-  }
-
   def attract(mover: Mover) = {
     var force = pos.sub(mover.pos)
-    var distanceSq = constrain(force.lengthSquared(), 100, 1000)
+    var distanceSq = constrain(force.lengthSquared(), 0.1, 50)
+    //var distanceSq = force.lengthSquared()
     var strength = (G * (mass * mover.mass)) / distanceSq
     force = force.mul(magnitudeFactor(force, strength))
     mover.applyForce(force)

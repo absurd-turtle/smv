@@ -5,7 +5,7 @@ import smv.AudioSource
 import smv.animations.engine.{AnimationItem, IAnimationLogic, Window}
 import smv.animations.geometry.Quad.createQuadMesh
 import smv.color.{ColorTheme, ColorThemeReader}
-import com.meapsoft.FFT
+import smv.audio.Analyzer._
 
 import scala.math.abs
 
@@ -52,36 +52,6 @@ class BandVisualizer(audioSource: AudioSource, colorTheme: ColorTheme, moveColor
 
     def getAmplitudes() = synchronized {
       audioSource.getAudioBuffer().clone()
-    }
-
-    def applyFFT(samples: Array[Double]): Array[Double] = {
-      //TODO: move this part to AudioSource or new Class AudioAnalyzer
-      var out = samples.clone()
-      var fft = new FFT(out.length)
-      var im = (for (x <- Range(0, out.length))
-        yield 0.0).toArray
-      fft.fft(out, im)
-      return out.slice(0, out.length/2)
-    }
-
-    def getBands(samples: Array[Double]): Array[Double] = {
-      var bins = applyFFT(samples)
-      var bandValues = new Array[Double](8)
-      for (i <- 1 until bins.length) {
-        val index = i match {
-          case x if x <= 3 => 0
-          case x if x <= 6 => 1
-          case x if x <= 12 => 2
-          case x if x <= 26 => 3
-          case x if x <= 55 => 4
-          case x if x <= 118 => 5
-          case x if x <= 251 => 6
-          case _ => 7
-        }
-        bandValues(index) = bandValues(index) + abs(bins(i))
-      }
-
-      return bandValues
     }
 
     @Override

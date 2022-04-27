@@ -11,4 +11,7 @@ object VectorUtils {
   // def setMag( v: Vector2d, magnitude: Double) = {
   //   v = v.mul(magnitudeFactor(v, magnitude))
   // }
+  def constrain(amt: Double, min: Double, max: Double): Double = {
+    if (amt < min) min else if (amt > max) max else amt
+  }
 }
